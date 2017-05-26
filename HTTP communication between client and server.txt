@@ -1,0 +1,10 @@
+
+communications between client and server
+--------------------------------------------------------------------------------------------------------------------------
+Communication			Method		URL				Parameters		Return Parameters
+--------------------------------------------------------------------------------------------------------------------------
+Retrive the list of talks	GET		/talks							serverTime, talks[]
+Create new talk  		PUT		/talks/nameofthetalk		presenter, summary
+Post the comment		POST		/talks/nameofthetalk/comments	author, message
+Retrive changes			GET		/talks				changesSince		serverTime, talks[]
+
