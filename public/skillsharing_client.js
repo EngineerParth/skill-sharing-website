@@ -56,16 +56,15 @@ function displayTalks(talks){
 
 function instantiateTemplate(name, values){
   function instantiateText(text){
-    return text.replace(/\{\{(\w+)\}\}/g, function(_, name){
+    return text.replace(/\{\{(\w+)\}\}/g, function(e, name){
       return values[name];
     });
   }
   function instantiate(node){
     if(node.nodeType == document.ELEMENT_NODE){
       var clone = node.cloneNode();
-      for(var i=0; i < node.childNodes.length, i++){
+      for(let i=0; i < node.childNodes.length; i++)
         clone.appendChild(instantiate(node.childNodes[i]));
-      }
       return clone;
     }else if(node.nodeType == document.TEXT_NODE){
       return document.createTextNode(instantiateText(node.nodeValue));
@@ -110,7 +109,7 @@ nameField.addEventListener("change", function(name){
 
 function addComment(title, comment){
   var comment={author:nameField.value, message:comment};
-  request({pathname:talkURL(title)+"/comments",
+  request({pathname:talkURL(title) + "/comments",
           method:"POST",
           body:JSON.stringify(comment)},
           reportError);
@@ -123,7 +122,7 @@ talkForm.addEventListener("submit", function(event){
           method:"PUT",
           body:JSON.stringify({
             presenter: nameField.value,
-            summary: talkForm.elements.summary.value;
+            summary: talkForm.elements.summary.value
           })},
           reportError
           );

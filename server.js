@@ -2,12 +2,12 @@ var http = require('http');
 var Router = require('./router');
 var ecstatic = require('ecstatic');
 
-var fileServer = ecstatic({root:"./public"});
+var fileServer = ecstatic({root:"./public", header:'Access-Control-Allow-Origin: *'});
 var router = new Router();
 http.createServer(function(request, response){
   if(!router.resolve(request, response)){
     fileServer(request, response);
-    console.log("in fileServer.");
+    console.log("File sever called.");
   }
 }).listen(9000);
 
@@ -28,13 +28,13 @@ function respondJSON(response, status, data){
 
 function readStreamAsJSON(stream, callback){
   console.log("in readStreamAsJSON");
-    var data="";
+    var data="", result, error;
     stream.on('data', function(chunk){
       data += chunk;
     });
     stream.on('end', function(){
       try{
-        var result = JSON.parse(data);
+        result = JSON.parse(data);
       }catch(e){error = e;}
       callback(error, result);
     });
@@ -59,7 +59,7 @@ function waitForChanges(since, response){
   };
   waiting.push(waiter);
   setTimeout(function(){
-    var found = waiter.indexOf(waiter);
+    var found = waiting.indexOf(waiter);
     if(found > -1){
       waiting.splice(found, 1);
       sendTalks([], response);
@@ -136,7 +136,7 @@ router.add('PUT', /^\/talks\/([^\/]+)$/, function(request, response, title){
   });
 });
 
-router.add('POST', /^\/talks\/([^\/]+)\/comments$ /,
+router.add('POST', /^\/talks\/([^\/]+)\/comments$/,
 function(request, response, title){
   readStreamAsJSON(request, function(error, comment){
     if(error){

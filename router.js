@@ -14,9 +14,12 @@ router.prototype.add = function(method, url, handler){
 router.prototype.resolve = function(request, response){
   var path = require("url").parse(request.url).pathname;
   console.log("In router.resolve()");
+  console.log("path: "+path);
   return this.routes.some(function(route){
     var match = route.url.exec(path);
-    if(!match || request.method != match.method){
+    console.log("match: "+match);
+    console.log("methods:"+request.method+","+route.method);
+    if(!match || request.method != route.method){
       console.log("resolve failed");
       return false;
     }
